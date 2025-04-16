@@ -1,17 +1,28 @@
+/* 背景样式：蓝色渐变流动 + 初始淡入动画 */
 body {
     font-family: "Segoe UI", "Noto Sans SC", sans-serif;
     margin: 0;
     padding: 0;
-    background: linear-gradient(120deg, #e0f0ff, #ffffff);
+    background: linear-gradient(120deg, #c2e9fb, #a1c4fd);
+    background-size: 400% 400%;
     background-attachment: fixed;
-    animation: fadein 1.2s ease;
+    animation: gradientFlow 15s ease infinite, fadein 1.2s ease;
 }
 
+/* 背景流动动画 */
+@keyframes gradientFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* 页面加载淡入动画 */
 @keyframes fadein {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
+/* 主体容器 */
 .container {
     max-width: 800px;
     margin: 50px auto;
@@ -21,11 +32,13 @@ body {
     box-shadow: 0 0 12px rgba(0, 123, 255, 0.2);
 }
 
+/* 标题样式 */
 h1, h2 {
     color: #007bff;
     text-align: center;
 }
 
+/* 按钮样式 */
 .btn, .btn-hero {
     display: inline-block;
     background: #007bff;
@@ -43,6 +56,7 @@ h1, h2 {
     background: #0056b3;
 }
 
+/* 首页介绍页背景容器 */
 .landing {
     display: flex;
     align-items: center;
@@ -51,10 +65,34 @@ h1, h2 {
     background: linear-gradient(to right, #d0eaff, #ffffff);
 }
 
+/* 首页内容卡片 */
 .landing-container {
     text-align: center;
     background: white;
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 6px 20px rgba(0, 123, 255, 0.15);
+}
+
+/* 响应式自适应 */
+@media (max-width: 768px) {
+    .container, .card {
+        width: 100%;
+        margin: 10px;
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    input, textarea, select, button {
+        font-size: 16px;
+    }
+
+    .btn {
+        padding: 12px;
+        font-size: 18px;
+    }
 }
