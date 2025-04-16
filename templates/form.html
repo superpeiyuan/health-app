@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>身体状态评估系统</title>
+    <style>
+        body {
+            font-family: "Microsoft YaHei", sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 25px;
+            width: 380px;
+        }
+
+        .card h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 6px;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>身体状态评估系统</h2>
+        <form method="POST" action="/result">
+            <div class="form-group">
+                <label for="height">身高（cm）：</label>
+                <input type="number" name="height" id="height" required>
+            </div>
+            <div class="form-group">
+                <label for="weight">体重（kg）：</label>
+                <input type="number" name="weight" id="weight" required>
+            </div>
+            <div class="form-group">
+                <label for="age">年龄：</label>
+                <input type="number" name="age" id="age" required>
+            </div>
+            <div class="form-group">
+                <label>性别：</label>
+                <label><input type="radio" name="sex" value="male" required> 男</label>
+                <label><input type="radio" name="sex" value="female"> 女</label>
+            </div>
+            <div class="form-group">
+                <label for="injury">伤病史：</label>
+                <input type="text" name="injury" id="injury" placeholder="如：膝关节损伤、腰椎问题">
+            </div>
+            <button type="submit" class="btn">提交并查看建议</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

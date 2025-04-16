@@ -1,17 +1,14 @@
-from flask import Flask, render_template, request, jsonify
-import requests
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# 你的 DeepSeek API key
-DEEPSEEK_API_KEY = "sk-b5b04543aec9492b929905138c412c44"
-
-# DeepSeek 接口地址
-DEEPSEEK_URL = "https://api.deepseek.com/chat/completions"
-
 @app.route('/')
-def index():
-    return render_template('index.html')
+def home():
+    return render_template('index.html')  # 首页介绍页
+
+@app.route('/form')
+def form():
+    return render_template('form.html')  # 原评估表单页面
 
 @app.route('/result', methods=['POST'])
 def result():
@@ -25,7 +22,6 @@ def result():
     ideal_weight = round(22 * ((height / 100) ** 2), 1)
     weight_diff = round(weight - ideal_weight, 1)
 
-    # 判定体重状态
     if bmi < 18.5:
         weight_status = "偏瘦"
         train_advice = (
@@ -38,7 +34,6 @@ def result():
             "多摄入高蛋白和复合碳水，如鸡蛋、牛奶、糙米、坚果。\n"
             "可适量加餐，如水果酸奶、花生酱三明治等。"
         )
-
     elif 18.5 <= bmi <= 23.9:
         weight_status = "正常"
         train_advice = (
@@ -51,7 +46,6 @@ def result():
             "注意控制油、盐、糖的摄入，养成规律饮食和睡眠习惯。\n"
             "日常可多食用新鲜蔬果、瘦肉和粗粮类主食。"
         )
-
     elif 24.0 <= bmi <= 27.9:
         weight_status = "偏重"
         train_advice = (
@@ -64,7 +58,6 @@ def result():
             "多吃富含纤维的蔬菜、豆类，减少主食比例。\n"
             "避免含糖饮料、油炸和高热量零食。"
         )
-
     else:
         weight_status = "肥胖"
         train_advice = (
@@ -78,14 +71,11 @@ def result():
             "避免暴饮暴食，三餐定量，必要时就医咨询营养师。"
         )
 
-    # 处理伤病建议
     injury_clean = injury.strip().replace(" ", "")
-
     if not injury_clean or injury_clean in ["无", "没有", "无伤病", "暂无", "暂无伤病", "无病史"]:
         injury_advice = "您暂时无伤病信息，建议正常训练前做好热身，注意身体信号，避免受伤。"
     else:
         injury_advice = f"您填写的伤病信息为：“{injury.strip()}”。建议避免对相关部位造成负担的动作，必要时请咨询专业康复师。"
-
 
     return render_template('result.html',
                            bmi=bmi,
@@ -95,37 +85,6 @@ def result():
                            train_advice=train_advice,
                            diet_advice=diet_advice,
                            injury_advice=injury_advice)
-
-
-
-@app.route('/chat', methods=['POST'])
-def chat():
-    user_msg = request.json.get("message")
-    
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {DEEPSEEK_API_KEY}"
-    }
-
-    payload = {
-        "model": "deepseek-chat",  # 或 deepseek-coder
-        "messages": [
-            {"role": "system", "content": "你是一位亲切的健康咨询助手，擅长运动建议与饮食建议"},
-            {"role": "user", "content": user_msg}
-        ],
-        "temperature": 0.7
-    }
-
-    try:
-        response = requests.post(DEEPSEEK_URL, headers=headers, json=payload)
-        result = response.json()
-
-        reply = result['choices'][0]['message']['content']
-    except Exception as e:
-        reply = f"发生错误：{str(e)}"
-
-    return jsonify({"response": reply})
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
